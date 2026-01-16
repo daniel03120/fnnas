@@ -13,13 +13,15 @@ on:
       fnnas_base_version:
         description: "Select fnnas base image version"
         required: false
-        default: "amlogic_322"
+        default: "amlogic_338"
         type: choice
         options:
+          - amlogic_338
           - amlogic_322
-          - allwinner_317
-          - rockchip_321
           - amlogic_300
+          - allwinner_317
+          - rockchip_330
+          - rockchip_321
           - rockchip_296
       debs_repo:
         description: "Set fnnas debs repository"
