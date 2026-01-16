@@ -200,11 +200,10 @@ on:
       kernel_repo:
         description: "Set fnnas kernel repository"
         required: false
-        default: "daniel03120/fnnas"
+        default: "ophub/fnnas"
         type: choice
         options:
           - ophub/fnnas
-          - daniel03120/fnnas
       fnnas_kernel:
         description: "Select fnnas kernel version"
         required: false
