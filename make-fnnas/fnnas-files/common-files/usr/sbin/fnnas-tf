@@ -68,8 +68,24 @@ expansion_partition() {
     pt_num="$(parted -s /dev/${DISK_NAME} print | awk '$1~/[1-9]+/ {print $1}' | wc -l)"
     [[ "${pt_num}" -ne "2" ]] && error_msg "Not 2 partitions, stop automatic expansion."
 
-    echo -e "${INFO} Start to expand the current partition..."
-    printf 'Yes\n-1\n' | parted ---pretend-input-tty /dev/${DISK_NAME} resizepart 2 100%
+    # 64GiB in bytes(64 * 1024^3)
+    LIMIT_BYTES=$((64 * 1024 * 1024 * 1024))
+
+    # Get disk size in bytes
+    DISK_SIZE_BYTES="$(parted -s /dev/${DISK_NAME} unit B print | grep "/dev/${DISK_NAME}:" | awk '{print $3}' | tr -d 'B')"
+    # Validate disk size
+    [[ "${DISK_SIZE_BYTES}" =~ ^[0-9]+$ ]] || DISK_SIZE_BYTES="0"
+
+    # Check disk size and select expansion strategy
+    if [[ "${DISK_SIZE_BYTES}" -gt "${LIMIT_BYTES}" ]]; then
+        echo -e "${INFO} Expanding partition to 64GiB limit, leaving the rest as unallocated..."
+        # If disk > 64GiB: Expand to 64GiB
+        printf 'Yes\n\n' | parted ---pretend-input-tty /dev/${DISK_NAME} resizepart 2 64GiB
+    else
+        echo -e "${INFO} Expanding partition to 100% (Full Disk)..."
+        # If disk <= 64GiB: Expand to 100%
+        printf 'Yes\n-1\n' | parted ---pretend-input-tty /dev/${DISK_NAME} resizepart 2 100%
+    fi
 
     echo -e "${INFO} Expansion file system..."
     ROOTFS_TYPE="$(df -hT / | grep "/" | awk '{print $2}')"
