@@ -78,7 +78,7 @@ expansion_partition() {
 
     # Check disk size and select expansion strategy
     if [[ "${DISK_SIZE_BYTES}" -gt "${LIMIT_BYTES}" ]]; then
-        echo -e "${INFO} Expanding partition to 16GiB limit, leaving the rest as unallocated..."
+        echo -e "${INFO} Expanding partition to 10GiB limit, leaving the rest as unallocated..."
         # If disk > 10GiB: Expand to 10GiB
         printf 'Yes\n\n' | parted ---pretend-input-tty /dev/${DISK_NAME} resizepart 2 10GiB
     else
