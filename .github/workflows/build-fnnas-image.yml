@@ -200,10 +200,11 @@ on:
       kernel_repo:
         description: "Set fnnas kernel repository"
         required: false
-        default: "ophub/fnnas"
+        default: "daniel03120/fnnas"
         type: choice
         options:
           - ophub/fnnas
+          - daniel03120/fnnas
       fnnas_kernel:
         description: "Select fnnas kernel version"
         required: false
@@ -395,7 +396,7 @@ jobs:
           [[ -n "${fnnas_storage}" ]] || fnnas_storage="fnnas_save"
           echo "build_tag=${fnnas_storage}" >> ${GITHUB_ENV}
           ln -sf /builder/fnnas ${{ github.workspace }}/fnnas
-          ln -sf /builder/fnnas /home/runner/work/_actions/ophub/fnnas/main/fnnas
+          ln -sf /builder/fnnas /home/runner/work/_actions/daniel03120/fnnas/main/fnnas
 
           echo "status=success" >> ${GITHUB_OUTPUT}
 
